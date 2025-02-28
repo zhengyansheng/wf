@@ -7,7 +7,6 @@ import (
 	"github.com/argoproj/argo-workflows/v3/pkg/apiclient"
 	"io/ioutil"
 	"k8s.io/client-go/tools/clientcmd"
-	"log"
 	"os"
 )
 
@@ -27,11 +26,11 @@ func NewAPIClient(ctx context.Context, kubeConfig []byte) (context.Context, apic
 			ArgoServerOpts: client.ArgoServerOpts,
 			InstanceID:     instanceID,
 			AuthSupplier: func() string {
-				authString, err := client.GetAuthString()
-				if err != nil {
-					log.Fatal(err)
-				}
-				return authString
+				//authString, err := client.GetAuthString()
+				//if err != nil {
+				//	log.Fatal(err)
+				//}
+				return client.GetAuthString()
 			},
 			ClientConfigSupplier: func() clientcmd.ClientConfig {
 				return clientConfig
