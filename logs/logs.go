@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-func WorkflowLogs(workflow, podName string, since time.Duration, sinceTime string, tailLines int64, grep, selector, container string, follow, previous, timestamps, noColor bool) error {
+func SteamLogs(workflow, podName string, since time.Duration, sinceTime string, tailLines int64, grep, selector, container string, follow, previous, timestamps, noColor bool) error {
 	logOptions := &corev1.PodLogOptions{
 		Container:  container,
 		Follow:     follow,
@@ -53,26 +53,4 @@ func WorkflowLogs(workflow, podName string, since time.Duration, sinceTime strin
 
 	return common.LogWorkflowWithColor(ctx, serviceClient, namespace, workflow, podName, grep, selector, logOptions)
 	//return common.LogWorkflowWithColor(ctx, serviceClient, namespace, logs, podName, grep, selector, logOptions)
-}
-
-func WorkflowLogsWithChannel(workflow, podName string, tailLines int64) (logLineChan chan string, err error) {
-	logOptions := &corev1.PodLogOptions{
-		Container: "main",
-		Follow:    true,
-	}
-
-	if tailLines >= 0 {
-		logOptions.TailLines = ptr.To(tailLines)
-	}
-
-	// 初始化 API 客户端
-	ctx := context.Background()
-	ctx, apiClient, err := client.NewAPIClient(ctx)
-	if err != nil {
-		return
-	}
-	serviceClient := apiClient.NewWorkflowServiceClient()
-	namespace := "argo" // 设置默认命名空间
-
-	return common.LogWorkflowWithChannel(ctx, serviceClient, namespace, workflow, podName, logOptions), nil
 }
