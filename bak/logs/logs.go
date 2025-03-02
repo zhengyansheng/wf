@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 	"github.com/argoproj/argo-workflows/v3/cmd/argo/commands/client"
-	"github.com/zhengyansheng/wf/common"
+	"github.com/zhengyansheng/workflow/common"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/utils/ptr"

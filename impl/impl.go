@@ -1,17 +1,17 @@
-package wf
+package impl
 
 import (
 	"context"
 	"fmt"
+
 	"github.com/argoproj/argo-workflows/v3/pkg/apiclient"
 	workflowpkg "github.com/argoproj/argo-workflows/v3/pkg/apiclient/workflow"
-	"github.com/argoproj/argo-workflows/v3/util/printer"
-	"github.com/zhengyansheng/wf/api"
-	"github.com/zhengyansheng/wf/common"
-	"github.com/zhengyansheng/wf/list"
+	wfv1 "github.com/argoproj/argo-workflows/v3/pkg/apis/workflow/v1alpha1"
+	"github.com/zhengyansheng/workflow/api"
+	"github.com/zhengyansheng/workflow/common"
+	"github.com/zhengyansheng/workflow/list"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/utils/ptr"
-	"os"
 )
 
 type Client struct {
@@ -49,17 +49,13 @@ func (c *Client) TerminateWorkflow(workflowName string) error {
 	return nil
 }
 
-func (c *Client) ListWorkflows() error {
-
+func (c *Client) ListWorkflows() (wfv1.Workflows, error) {
 	serviceClient := c.client.NewWorkflowServiceClient()
 	workflows, err := list.ListWorkflows(c.ctx, serviceClient)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return printer.PrintWorkflows(workflows, os.Stdout, printer.PrintOpts{
-		NoHeaders: false,
-		Namespace: false,
-	})
+	return workflows, nil
 }
 
 func (c *Client) StreamLogs(workflow, podName string, tailLines int64) (chan string, error) {

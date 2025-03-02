@@ -1,8 +1,8 @@
-package wf
+package impl
 
 import (
 	"fmt"
-	"github.com/zhengyansheng/wf/pkg/file"
+	"github.com/zhengyansheng/workflow/pkg/file"
 	"testing"
 )
 
